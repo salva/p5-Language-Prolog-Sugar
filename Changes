@@ -1,5 +1,8 @@
 Revision history for Perl extension Language::Prolog::Sugar.
 
+0.03  22 Sep 2005
+	- META.yml added
+
 0.02  Thu Nov 28 2002
         - Cleaned up for CPAN release
 
