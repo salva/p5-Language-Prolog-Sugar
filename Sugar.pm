@@ -1,6 +1,6 @@
 package Language::Prolog::Sugar;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 use strict;
 use warnings;
@@ -122,7 +122,7 @@ Language::Prolog::Sugar - Syntactic sugar for Prolog term constructors
   use Language::Prolog::Sugar functors =>{ equal => '=',
                                            minus => '-' };
 
-  use Language::Prolog::Sugar funtors =>[qw(is)];
+  use Language::Prolog::Sugar functors =>[qw(is)];
 
   use Language::Prolog::Sugar atoms =>[qw(foo bar)];
 
