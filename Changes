@@ -1,5 +1,8 @@
 Revision history for Perl extension Language::Prolog::Sugar.
 
+0.05  25 Jun 2006
+        - added auto_functor.
+
 0.04  22 Sep 2005
 	- META.yml added
 

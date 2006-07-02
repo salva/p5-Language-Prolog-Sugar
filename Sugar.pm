@@ -1,6 +1,6 @@
 package Language::Prolog::Sugar;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use strict;
 use warnings;
@@ -101,10 +101,26 @@ sub import {
 		croak "invalid argument '$chains' for $key option";
 	    }
 	}
+        elsif ($key eq 'auto_functor') {
+            export \&_autoload, $to, 'AUTOLOAD';
+        }
 	else {
 	    croak "Unknow option '$key'";
 	}
     }
+}
+
+our $AUTOLOAD;
+sub _autoload {
+    my ($pkg, $name) = $AUTOLOAD =~ /(?:(.*)::)?(.*)/;
+    $pkg = 'main' unless length $pkg;
+    $name =~ /^[A-Z]/
+        and croak "invalid functor name '$name': starts with uppercase";
+
+    export sub { prolog_functor($name, @_) }, $pkg, $name;
+
+    no strict 'refs';
+    goto &$AUTOLOAD
 }
 
 1;
@@ -210,7 +226,6 @@ returns
 
   '='(3, 4, 5, 6, 7)
 
-
 I call 'chain' the structure formed tipically by ','/2 or ';'/2
 operators in Prolog programs. i.e., Prolog program
 
@@ -221,7 +236,7 @@ is actually
   ','(p, ','(o, ','(r, s))).
 
 
-using chains allows for a more easily composition of these structures:
+using chains allows for a more easily composition of those structures:
 
   use Language::Prolog::Sugar chains => { andn => ',' },
                               atoms => [qw(p o r s)];
@@ -233,17 +248,22 @@ and
 generates the Prolog structure for the example program above.
 
 
+Also, the tag C<auto_functor> can be used to install and AUTOLOAD sub
+on the caller module that would make a functor for every undefined
+subroutine. For instance:
+
+  use Language::Prolog::Sugar 'auto_functor';
+  swi_call(use_module(library(pce)));
+
+
 =head1 SEE ALSO
 
 L<Language::Prolog::Types>, L<Language::Prolog::Types::Factory>
 
-=head1 AUTHOR
-
-Salvador Fandiño, E<lt>sfandino@yahoo.comE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2002 by Salvador Fandiño
+Copyright 2002-2006 by Salvador Fandiño (sfandino@yahoo.com).
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
