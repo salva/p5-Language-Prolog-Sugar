@@ -5,7 +5,7 @@ our $VERSION = '0.05';
 use strict;
 use warnings;
 
-use Carp;
+use Carp qw(carp croak);
 use Language::Prolog::Types ':ctors';
 
 
@@ -102,7 +102,11 @@ sub import {
 	    }
 	}
         elsif ($key eq 'auto_functor') {
-            export \&_autoload, $to, 'AUTOLOAD';
+            carp "Language::Prolog::Sugar auto_functor has been obsoleted";
+            export \&_auto_functor, $to, 'AUTOLOAD';
+        }
+        elsif ($key eq 'auto_term') {
+            export \&_auto_term, $to, 'AUTOLOAD';
         }
 	else {
 	    croak "Unknow option '$key'";
@@ -111,13 +115,37 @@ sub import {
 }
 
 our $AUTOLOAD;
-sub _autoload {
+sub _auto_functor {
     my ($pkg, $name) = $AUTOLOAD =~ /(?:(.*)::)?(.*)/;
     $pkg = 'main' unless length $pkg;
     $name =~ /^[A-Z]/
         and croak "invalid functor name '$name': starts with uppercase";
 
     export sub { prolog_functor($name, @_) }, $pkg, $name;
+
+    no strict 'refs';
+    goto &$AUTOLOAD
+}
+
+sub _auto_term {
+    my ($pkg, $name) = $AUTOLOAD =~ /(?:(.*)::)?(.*)/;
+    $pkg = 'main' unless length $pkg;
+    if ($name =~ /^[A-Z]/) {
+        my $var = prolog_var $name;
+        my $sub = sub () {
+            # print "$name\n";
+            # 1+sin(1);
+            # if (@_ > 0) {
+                # print "hello\n";
+                # croak "$name represents a prolog var, it does not accept arguments";
+            # }
+            $var;
+        };
+        export $sub, $pkg, $name;
+    }
+    else {
+        export sub { prolog_functor($name, @_) }, $pkg, $name;
+    }
 
     no strict 'refs';
     goto &$AUTOLOAD
@@ -248,13 +276,15 @@ and
 generates the Prolog structure for the example program above.
 
 
-Also, the tag C<auto_functor> can be used to install and AUTOLOAD sub
-on the caller module that would make a functor for every undefined
-subroutine. For instance:
+Also, the tag C<auto_term> can be used to install and AUTOLOAD sub on
+the caller module that would make a functor, term or variable for
+every undefined subroutine. For instance:
 
-  use Language::Prolog::Sugar 'auto_functor';
+  use Language::Prolog::Sugar 'auto_term';
   swi_call(use_module(library(pce)));
+  swi_call(foo(hello, Hello))
 
+The old C<auto_functor> tag has been obsoleted.
 
 =head1 SEE ALSO
 
