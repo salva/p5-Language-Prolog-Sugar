@@ -1,5 +1,5 @@
-Language/Prolog/Sugar version 0.02
-==================================
+Language/Prolog/Sugar
+=====================
 
 This module allows for the easily creation of subs to construct
 Prolog terms as implemented in the Language::Prolog::Types package.
@@ -24,7 +24,7 @@ This module requires these other modules and libraries:
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2002 Salvador Fandiño
+Copyright (C) 2002-2006 Salvador Fandiño
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

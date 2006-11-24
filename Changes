@@ -1,5 +1,9 @@
 Revision history for Perl extension Language::Prolog::Sugar.
 
+0.06  24 Nov 2006
+        - added auto_term
+        - auto_functor obsoleted
+
 0.05  25 Jun 2006
         - added auto_functor.
 
