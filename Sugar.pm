@@ -1,6 +1,6 @@
 package Language::Prolog::Sugar;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 use strict;
 use warnings;
@@ -132,15 +132,7 @@ sub _auto_term {
     $pkg = 'main' unless length $pkg;
     if ($name =~ /^[A-Z]/) {
         my $var = prolog_var $name;
-        my $sub = sub () {
-            # print "$name\n";
-            # 1+sin(1);
-            # if (@_ > 0) {
-                # print "hello\n";
-                # croak "$name represents a prolog var, it does not accept arguments";
-            # }
-            $var;
-        };
+        my $sub = sub () { $var };
         export $sub, $pkg, $name;
     }
     else {
@@ -293,7 +285,7 @@ L<Language::Prolog::Types>, L<Language::Prolog::Types::Factory>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2002-2006 by Salvador Fandiño (sfandino@yahoo.com).
+Copyright 2002-2006 by Salvador FandiE<ntilde>o (sfandino@yahoo.com).
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
