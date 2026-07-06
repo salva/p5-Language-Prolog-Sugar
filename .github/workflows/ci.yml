@@ -19,7 +19,7 @@ jobs:
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set up perl
         if: runner.os != 'Windows'
         uses: shogo82148/actions-setup-perl@v1
