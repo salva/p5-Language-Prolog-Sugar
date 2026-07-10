@@ -58,6 +58,6 @@
          "web" : "https://github.com/salva/p5-Language-Prolog-Sugar"
       }
    },
-   "version" : "0.06",
+   "version" : "0.06_01",
    "x_serialization_backend" : "JSON::PP version 4.18"
 }
